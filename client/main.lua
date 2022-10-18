@@ -143,10 +143,12 @@ RegisterCommand('_lockVehicle', function()
 end, false)
 RegisterKeyMapping('_lockVehicle', langSettings[language]['keyMappingLabel'], 'keyboard', 'O')
 
-function giveKeys(target)
-	if GetPlayerServerId(PlayerId()) == target then
-		exports['mythic_notify']:SendAlert('error', langSettings[language]['AlreadyHasKeys'])
-		return
+function giveKeys(target, ignoreFlags) -- ignoreFlags is default false, if you want to give keys to a player for a job car then use exports['op-vehlock']:giveKeys(int playerId, bool ignoreFlags)
+	if not ignoreFlags then
+		if GetPlayerServerId(PlayerId()) == target then
+			exports['mythic_notify']:SendAlert('error', langSettings[language]['AlreadyHasKeys'])
+			return
+		end
 	end
 	if GetPlayerFromServerId(target) == -1 then
 		exports['mythic_notify']:SendAlert('error', langSettings[language]['TargetNotOnline'])
