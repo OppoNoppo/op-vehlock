@@ -54,8 +54,20 @@ function changeLock(plate, veh)
 		if isLocked then -- is locked
 			lib.callback('op-vehlock:updateLock', false, function(result)
 				if result then
-					exports['mythic_notify']:SendAlert('success', (langSettings[language]['NowOpen']):format(plate))
 					SetVehicleDoorsLocked(veh, 0)
+					exports['mythic_notify']:SendAlert('success', (langSettings[language]['NowOpen']):format(plate))
+					TaskPlayAnim(PlayerPedId(), 'anim@mp_player_intmenu@key_fob@', "fob_click", 8.0, 8.0, -1, 48, 1, false, false, false)
+					SetVehicleLights(veh, 2)
+					Wait (200)
+					SetVehicleLights(veh, 0)
+					Wait (200)
+					SetVehicleLights(veh, 2)
+					Wait (200)
+					SetVehicleLights(veh, 0)
+					Wait (200)
+					SetVehicleLights(veh, 2)
+					Wait (200)
+					SetVehicleLights(veh, 0)
 				else
 					print('error with plate '..plate)
 				end
@@ -63,8 +75,20 @@ function changeLock(plate, veh)
 		else -- is not locked
 			lib.callback('op-vehlock:updateLock', false, function(result)
 				if result then
-					exports['mythic_notify']:SendAlert('error', (langSettings[language]['NowLocked']):format(plate))
 					SetVehicleDoorsLocked(veh, 2)
+					exports['mythic_notify']:SendAlert('error', (langSettings[language]['NowLocked']):format(plate))
+					TaskPlayAnim(PlayerPedId(), 'anim@mp_player_intmenu@key_fob@', "fob_click", 8.0, 8.0, -1, 48, 1, false, false, false)
+					SetVehicleLights(veh, 2)
+					Wait (400)
+					SetVehicleLights(veh, 0)
+					Wait (400)
+					SetVehicleLights(veh, 2)
+					Wait (400)
+					SetVehicleLights(veh, 0)
+					Wait (400)
+					SetVehicleLights(veh, 2)
+					Wait (400)
+					SetVehicleLights(veh, 0)
 				else
 					print('error with plate '..plate)
 				end
