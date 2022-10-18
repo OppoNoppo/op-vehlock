@@ -1,6 +1,7 @@
 ESX                           = nil
 
 Citizen.CreateThread(function()
+	lib.requestAnimDict('anim@mp_player_intmenu@key_fob@', 100)
 	-- print(json.encode(langSettings[language],{indent=true}))
 	while ESX == nil do
 		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
