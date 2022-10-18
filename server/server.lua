@@ -2,6 +2,8 @@ ESX               = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
+lib.versionCheck('OppoNoppo/op-vehlock')
+
 local lockedVehicles = nil
 
 function getLocks()
