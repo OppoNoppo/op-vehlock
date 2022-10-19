@@ -207,12 +207,12 @@ end)
 
 ]]
 
--- if lockpickEnabled then
+if lockpickEnabled then
     ESX.RegisterUsableItem('lockpick', function(source)
         print('test')
         TriggerClientEvent('op-vehlock:lockpickVehicle', source)
     end)
--- end
+end
 
 lib.callback.register('op-vehlock:lockpickRemove', function(source)
     local xPlayer = ESX.GetPlayerFromId(source)
