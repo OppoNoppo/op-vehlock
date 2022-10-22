@@ -1,4 +1,3 @@
-if GetResourceState('ox_inventory') ~= 'started' then useAsItemMetadata = false end
 if GetResourceState('ox_target') ~= 'started' or GetResourceState('qtarget') ~= 'started' then usingTarget = false end
 
 ESX                           = nil
