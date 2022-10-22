@@ -71,6 +71,19 @@ lib.callback.register('op-vehlock:giveKeys', function(source, plate, target)
     return r
 end)
 
+RegisterNetEvent('op-vehlock:removeKeys', function(source, data)
+    MySQL.query('DELETE FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {data.plate, data.identifier}, function(result)
+        if result then
+            r = true
+        end
+    end)
+end)
+
+RegisterNetEvent('op-vehlock:removeKeysID', function(plate, playerId)
+    print(plate, playerId)
+    MySQL.query('DELETE FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, ESX.GetPlayerFromId(playerId).identifier})
+end)
+
 RegisterNetEvent('op-vehlock:wipeKeys', function(plate)
     MySQL.query('DELETE FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ?', {plate}, function(result)
         if result then
@@ -83,16 +96,46 @@ RegisterNetEvent('op-vehlock:wipeKeys:ALL', function()
     local r = MySQL.query('DELETE FROM `'..('%s'):format(dbTableKeys)..'`', {})
 end)
 
-lib.callback.register('op-vehlock:hasKey', function(source, plate)
-    local xPlayer = ESX.GetPlayerFromId(source)
+lib.callback.register('op-vehlock:hasKey', function(source, plate, identifier, isPlayerID)
+    if isPlayerID then
+        identifier = ESX.GetPlayerFromId(identifier).identifier
+    end
+    if not identifier then
+        identifier = ESX.GetPlayerFromId(source).identifier
+    end
     local r = false
-    r = MySQL.single.await('SELECT plate, identifier FROM `'..('%s'):format(dbTableKeys)..'` WHERE identifier = ? AND plate = ?', {xPlayer.identifier, plate})
+    r = MySQL.single.await('SELECT plate, identifier FROM `'..('%s'):format(dbTableKeys)..'` WHERE identifier = ? AND plate = ?', {identifier, plate})
     if r then
-        if r.identifier == xPlayer.identifier then
+        if r.identifier == identifier then
             r = true
         else
             r = false
         end
+    else
+        r = false
+    end
+    return r
+end)
+
+lib.callback.register('op-vehlock:getKeysOnPlate', function(source, plate)
+    r = MySQL.query.await('SELECT * FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ?', {plate})
+    if r then
+        return r
+    else
+        return false
+    end
+end)
+
+RegisterNetEvent('op-vehlock:removeKeyFromPlate', function(data)
+    local plate = data.plate
+    local identifier = data.identifier
+    MySQL.query('DELETE FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, identifier})
+end)
+
+lib.callback.register('op-vehlock:getPlayerNameFromIdentifier', function(source,identifier)
+    local r = MySQL.single.await('SELECT firstname, lastname FROM users WHERE identifier = ?', {identifier})
+    if  r then
+        r = r.firstname .. ' ' .. r.lastname
     else
         r = false
     end
@@ -180,6 +223,10 @@ if enableKeys then
     lib.addCommand(false, {'givekeys'}, function(source, args)
         TriggerClientEvent('op-vehlock:giveKeys', source, args.target)
     end, {'target:number'})
+
+    lib.addCommand(false, {'removeKeys'}, function(source)
+        TriggerClientEvent('op-vehlock:removeKeys', source)
+    end)
 
     lib.addCommand('group.admin', {'wipekeys'}, function(source, args)
         TriggerEvent('op-vehlock:wipeKeys', args.plate)

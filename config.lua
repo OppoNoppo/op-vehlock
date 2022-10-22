@@ -12,7 +12,7 @@ lockpickEnabled = true
 lockpickLevels = {'medium', 'easy', 'medium'} -- Refering to https://overextended.github.io/docs/ox_lib/Interface/Client/skillcheck
 
 usingTarget = true
-targetFramework = 'qtarget' -- supported: ox, qtarget
+targetFramework = 'ox' -- supported: ox, qtarget ( I Suggest ox_target since it is a lot more reliable )
 
 --[[
 #   Locks Settings
@@ -45,8 +45,17 @@ langSettings = {
         ['AlreadyHasKeys'] = 'You already have the keys',
         ['VehicleRequired'] = 'You need to be in a vehicle',
         ['TargetAlreadyHasKeys'] = 'Target already has the keys for %s', -- ( %s = plate)
+        ['TargetAlreadyHasNOKeys'] = 'Target does not have the keys for %s', -- ( %s = plate)
         ['KeysGivenTo'] = 'Keys for plate %s have been given to %s', -- (1st %s = plate, 2nd %s = target identifier)
+        ['NoKeys'] = 'There are no keys registered to plate %s', -- ( %s = plate )
+        ['ClickToRemove'] = 'Click to remove key access',
+
+        -- Target // Keys
         ['UseKeys'] = 'Use Keys', -- only for when target is enabled
+        ['RemoveKeys'] = 'Remove Keys',
+        ['GiveKeys'] = 'Give Keys',
+        ['SelectPlayer'] = 'Select a player',
+        ['KeysRemoved'] = 'Keys of target removed',
 
         -- Locks
         ['NowOpen'] = '%s is now Open', -- ( %s = plate )
@@ -55,11 +64,14 @@ langSettings = {
         -- Lockpick
         ['LeaveVehicle'] = 'You must leave your vehicle to do this.',
         ['LockPickFailed'] = 'Your lockpick broke, task failed.',
+        ['UseLockpick'] = 'Use Lock-pick',
 
         -- Error
         ['TargetNotOnline'] = 'Target is not online',
         ['TargetToFar'] = 'Target is to far',
         ['ETryAgain'] = 'There has been an error, please try again.',
+        ['ENoAccess'] = 'You don\'t have access to this vehicle.',
+        ['NoResult'] = 'No results found',
     },
     ['nl'] = {
         ['keyMappingLabel'] = 'Voertuig slot',
@@ -70,8 +82,17 @@ langSettings = {
         ['AlreadyHasKeys'] = 'Je bezit deze sleutels al',
         ['VehicleRequired'] = 'Je moet in een voertuig zitten',
         ['TargetAlreadyHasKeys'] = 'Speler heeft al de sleutels voor %s', -- ( %s = plate)
-        ['KeysGivenTo'] = 'Sleutels voor %s zijn gedeeld met %s', -- (1st %s = plate, 2nd %s = target identifier)
-        ['UseKeys'] = 'Gebruik sleutels', -- only for when target is enabled
+        ['TargetAlreadyHasNOKeys'] = 'Speler heeft geen sleutels voor %s', -- ( %s = plate)
+        ['KeysGivenTo'] = 'Keys for plate %s have been given to %s', -- (1st %s = plate, 2nd %s = target identifier)
+        ['NoKeys'] = 'There are no keys registered to plate %s', -- ( %s = plate )
+        ['ClickToRemove'] = 'Click to remove key access',
+
+        -- Target // Keys
+        ['UseKeys'] = 'Use Keys', -- only for when target is enabled
+        ['RemoveKeys'] = 'Remove Keys',
+        ['GiveKeys'] = 'Give Keys',
+        ['SelectPlayer'] = 'Select a player',
+        ['KeysRemoved'] = 'Sleutels van speler verwijderd',
 
         -- Locks
         ['NowOpen'] = '%s is nu van het slot', -- ( %s = plate )
@@ -80,10 +101,13 @@ langSettings = {
         -- Lockpick
         ['LeaveVehicle'] = 'Graag het voertuig verlaten.',
         ['LockPickFailed'] = 'Openbreken gefaalt.',
+        ['UseLockpick'] = 'Lockpick gebruiken',
 
         -- Error
         ['TargetNotOnline'] = 'Speler is niet online',
         ['TargetToFar'] = 'Speler is te ver weg',
         ['ETryAgain'] = 'Er is een error, probeer opnieuw.',
+        ['ENoAccess'] = 'Geen toegang tot het slot van dit voertuig.',
+        ['NoResult'] = 'Geen resultaat gevonden',
     }
 }
