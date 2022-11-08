@@ -1,6 +1,6 @@
 if GetResourceState('ox_target') ~= 'started' or GetResourceState('qtarget') ~= 'started' then usingTarget = false end
 
-ESX                           = nil
+ESX = exports["es_extended"]:getSharedObject()
 
 local isOnTimer 		= 0
 
@@ -19,11 +19,6 @@ CreateThread(function()
 	lib.requestAnimDict('anim@mp_player_intmenu@key_fob@', 100)
 	lib.requestAnimDict('anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 100)
 	-- print(json.encode(langSettings[language],{indent=true}))
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Wait(0)
-	end
-
 end)
 
 
