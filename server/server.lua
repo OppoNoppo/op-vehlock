@@ -57,11 +57,18 @@ end)
 lib.callback.register('op-vehlock:giveKeys', function(source, plate, target)
     local r = false
     local r2 = false
+    local keycombo = 'KEY-'..math.random(000000, 999999)
     r2 = MySQL.single.await('SELECT * FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, ESX.GetPlayerFromId(target).identifier})
     if r2 == nil then
         r = MySQL.insert.await('INSERT INTO `'..('%s'):format(dbTableKeys)..'` (plate, identifier) VALUES (?,?)', {plate, ESX.GetPlayerFromId(target).identifier})
         if r ~= false then
-            r = true
+            exports['ox_inventory']:AddItem(target, 'car_key', 1, {key_combo = keycombo}, nil, function(success, response)
+                if success then
+                    r = true
+                else
+                    r = 'itemnotCreated'
+                end
+            end)
         end
     else
         r = false
@@ -102,15 +109,21 @@ lib.callback.register('op-vehlock:hasKey', function(source, plate, identifier, i
         identifier = ESX.GetPlayerFromId(source).identifier
     end
     local r = false
-    r = MySQL.single.await('SELECT plate, identifier FROM `'..('%s'):format(dbTableKeys)..'` WHERE identifier = ? AND plate = ?', {identifier, plate})
-    if r then
-        if r.identifier == identifier then
-            r = true
-        else
-            r = false
+    if useKeyAsItem then
+        local qr = MySQL.single.await('SELECT `key_combo`, `plate` FROM `'..('%s'):format(dbTableKeys)..'` WHERE `plate` = ?', {plate})
+        if qr then
+            local hasItem = exports['ox_inventory']:Search(source, 'count', 'car_key', {['key_combo'] = qr['key_combo']})
+            if hasItem > 0 then
+                r = true
+            end
         end
     else
-        r = false
+        r = MySQL.single.await('SELECT `plate`, `initial_owner` FROM `'..('%s'):format(dbTableKeys)..'` WHERE `initial_owner` = ? AND `plate` = ?', {identifier, plate})
+        if r then
+            if r.identifier == identifier then
+                r = true
+            end
+        end
     end
     return r
 end)

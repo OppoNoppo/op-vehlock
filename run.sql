@@ -1,7 +1,9 @@
 CREATE TABLE IF NOT EXISTS `op-vehkeys` (
   `plate` varchar(50) NOT NULL,
-  `identifier` varchar(255) NOT NULL,
-  KEY `identifier` (`identifier`),
+  `initial_owner` varchar(255) NULL,
+  `key_combo` varchar(50) NULL,
+  KEY `initial_owner` (`initial_owner`),
+  KEY 'key_combo' (`key_combo`),
   KEY `plate` (`plate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

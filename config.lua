@@ -28,6 +28,8 @@ lockRadius = 5
 dbTableKeys = 'op-vehkeys'
 enableKeys = true -- Either enable or disable the keys functionality
 wipeKeysOnStartup = false -- Wipe all shared keys on resource startup
+useKeyAsItem = false --[[ Supported inventory's = [ox_inventory] ]]
+--[[ If you use an other inventory and want this feature please create a issue report in github, or make an ticket on discord ]]
 
 --[[
 #   Language Settings
