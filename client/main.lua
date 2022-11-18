@@ -18,7 +18,6 @@ local targetSys2		= nil -- Second target
 CreateThread(function()
 	lib.requestAnimDict('anim@mp_player_intmenu@key_fob@', 100)
 	lib.requestAnimDict('anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 100)
-	-- print(json.encode(langSettings[language],{indent=true}))
 end)
 
 
@@ -244,7 +243,6 @@ RegisterNetEvent('op-vehlock:giveKeys_TARGETONLY', function(targetParameter)
 						label = langSettings[language]['GiveKeys'],
 						onSelect = function(entity)
 							local playerId, playerPed, playerCoords = lib.getClosestPlayer(vector3(entity.coords.x,entity.coords.y,entity.coords.z), 1.5, false)
-							-- print(json.encode(player))
 							targetSys2 = GetPlayerServerId(playerId)
 							lib.hideTextUI()
 							exports.ox_target:removeGlobalPlayer('op-vehlock:targetsys2GiveKeys')
@@ -263,7 +261,6 @@ RegisterNetEvent('op-vehlock:giveKeys_TARGETONLY', function(targetParameter)
 							action = function(entity)
 								local coords = GetEntityCoords(entity)
 								local playerId, playerPed, playerCoords = lib.getClosestPlayer(coords, 1.5, false)
-								-- print(json.encode(player))
 								targetSys2 = GetPlayerServerId(playerId)
 								lib.hideTextUI()
 								exports.qtarget:RemovePlayer({
@@ -309,7 +306,6 @@ RegisterNetEvent('op-vehlock:giveKeys_TARGETONLY', function(targetParameter)
 end)
 
 RegisterNetEvent('op-vehlock:giveKeys',function(target)
-	-- print('test')
 	giveKeys(target)
 end)
 
@@ -374,7 +370,6 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 								label = langSettings[language]['ClickToRemove'],
 								onSelect = function(entity)
 									local playerId, playerPed, playerCoords = lib.getClosestPlayer(vector3(entity.coords.x,entity.coords.y,entity.coords.z), 1.5, false)
-									-- print(json.encode(player))
 									targetSys2 = GetPlayerServerId(playerId)
 									lib.hideTextUI()
 									exports.ox_target:removeGlobalPlayer('op-vehlock:targetsys2RemKeys')
@@ -394,7 +389,6 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 									action = function(entity)
 										local coords = GetEntityCoords(entity)
 										local playerId, playerPed, playerCoords = lib.getClosestPlayer(coords, 1.5, false)
-										-- print(json.encode(player))
 										targetSys2 = GetPlayerServerId(playerId)
 										lib.hideTextUI()
 										exports.qtarget:RemovePlayer({
@@ -411,11 +405,9 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 						timer = timer - 1
 					end
 					-- Has all parameters
-					print(targetSys2)
 					if targetSys2 then
 						lib.callback('op-vehlock:hasKey', false, function(hasKey)
 							if hasKey then
-								print(targetSys2)
 								TriggerServerEvent('op-vehlock:removeKeysID', ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)), targetSys2)
 							else
 								lib.notify({type='error',title=(langSettings[language]['TargetAlreadyHasNOKeys']):format(ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)))})
@@ -502,7 +494,7 @@ RegisterNetEvent('op-vehlock:lockpickVehicle', function()
 end)
 
 function doLockpicking(veh)
-	local plate = GetVehicleNumberPlateText(veh)
+	local plate = ESX.Math.Trim(GetVehicleNumberPlateText(veh))
 	TaskPlayAnim(GetPlayerPed(-1), 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@' , 'machinic_loop_mechandplayer' ,8.0, -8.0, -1, 1, 0, false, false, false )
 	local success = lib.skillCheck(lockpickLevels)
 	if success then
@@ -526,7 +518,7 @@ if usingTarget then
 	if targetFramework == 'ox' then
 		local function targetLockSys(veh) -- ox_target function only
 			local result = false
-            local plate = GetVehicleNumberPlateText(veh)
+            local plate = ESX.Math.Trim(GetVehicleNumberPlateText(veh))
             result = lib.callback.await('op-vehlock:isOwner', false, plate)
 			if not result and enableKeys then
 				result = lib.callback.await('op-vehlock:hasKey', false, plate)
@@ -581,19 +573,9 @@ if usingTarget then
 					icon = 'fa-solid fa-key',
 					label = langSettings[language]['UseKeys'],
 					action = function(entity)
-						local plate = GetVehicleNumberPlateText(entity)
+						local plate = ESX.Math.Trim(GetVehicleNumberPlateText(entity))
                     	changeLock(plate,entity)
 					end,
-					-- canInteract = function(entity)
-					-- 	print(json.encode(entity))
-					-- 	local result = false
-					-- 	local plate = GetVehicleNumberPlateText(entity)
-					-- 	result = lib.callback.await('op-vehlock:isOwner', false, plate)
-					-- 	if not result and enableKeys then
-					-- 		result = lib.callback.await('op-vehlock:hasKey', false, plate)
-					-- 	end
-					-- 	return result
-					-- end
 				},
 				{
 					icon = 'fa-solid fa-user-lock',
