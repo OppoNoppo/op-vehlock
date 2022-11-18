@@ -2,7 +2,7 @@ fx_version 'cerulean'
 games { 'gta5' }
 author 'OppoNoppo#0226'
 description 'op-vehlock | OppoNoppo Vehicle lock'
-version '1.1.7'
+version '1.2.0'
 
 lua54 'yes'
 
