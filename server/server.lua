@@ -57,21 +57,48 @@ end)
 lib.callback.register('op-vehlock:giveKeys', function(source, plate, target)
     local r = false
     local r2 = false
-    local keycombo = 'KEY-'..math.random(000000, 999999)
-    r2 = MySQL.single.await('SELECT * FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, ESX.GetPlayerFromId(target).identifier})
-    if r2 == nil then
-        r = MySQL.insert.await('INSERT INTO `'..('%s'):format(dbTableKeys)..'` (plate, identifier) VALUES (?,?)', {plate, ESX.GetPlayerFromId(target).identifier})
-        if r ~= false then
-            exports['ox_inventory']:AddItem(target, 'car_key', 1, {key_combo = keycombo}, nil, function(success, response)
-                if success then
-                    r = true
-                else
-                    r = 'itemnotCreated'
-                end
-            end)
+    if useKeyAsItem then
+        local q = MySQL.query.await('SELECT * FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ?', {plate})
+        if #q > 0 then
+            -- Key already exists
+            local targetKey = exports['ox_inventory']:Search(target, 'count', 'car_keys', {key_combo = q[1]['key_combo']})
+            if targetKey then
+                r = false
+            else
+                exports['ox_inventory']:AddItem(target, 'car_keys', 1, {key_combo = q[1]['key_combo']}, nil, function(success, response)
+                    if success then
+                        r = true
+                    else
+                        r = 'itemnotCreated'
+                    end
+                end)
+            end
+        else
+            -- No current key data
+            local keycombo = 'KEY-'..math.random(000000, 999999)
+            local keygen = MySQL.insert.await('INSERT INTO `'..('%s'):format(dbTableKeys)..'` (`plate`, `key_combo`) VALUES (?,?)', {plate, keycombo})
+            if keygen ~= false then
+                exports['ox_inventory']:AddItem(target, 'car_keys', 1, {key_combo = keycombo}, nil, function(success, response)
+                    if success then
+                        r = true
+                    else
+                        r = 'itemnotCreated'
+                    end
+                end)
+            else
+                r = false
+            end
         end
     else
-        r = false
+        r2 = MySQL.single.await('SELECT * FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, ESX.GetPlayerFromId(target).identifier})
+        if r2 == nil then
+            r = MySQL.insert.await('INSERT INTO `'..('%s'):format(dbTableKeys)..'` (plate, identifier) VALUES (?,?)', {plate, ESX.GetPlayerFromId(target).identifier})
+            if r ~= false then
+                r = true
+            end
+        else
+            r = false
+        end
     end
     return r
 end)
@@ -85,7 +112,6 @@ RegisterNetEvent('op-vehlock:removeKeys', function(source, data)
 end)
 
 RegisterNetEvent('op-vehlock:removeKeysID', function(plate, playerId)
-    print(plate, playerId)
     MySQL.query('DELETE FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, ESX.GetPlayerFromId(playerId).identifier})
 end)
 
@@ -110,15 +136,15 @@ lib.callback.register('op-vehlock:hasKey', function(source, plate, identifier, i
     end
     local r = false
     if useKeyAsItem then
-        local qr = MySQL.single.await('SELECT `key_combo`, `plate` FROM `'..('%s'):format(dbTableKeys)..'` WHERE `plate` = ?', {plate})
+        local qr = MySQL.query.await('SELECT * FROM `'..('%s'):format(dbTableKeys)..'` WHERE `plate` = ?', {plate})
         if qr then
-            local hasItem = exports['ox_inventory']:Search(source, 'count', 'car_key', {['key_combo'] = qr['key_combo']})
+            local hasItem = exports['ox_inventory']:Search(source, 'count', 'car_keys', {key_combo = qr[1]['key_combo']})
             if hasItem > 0 then
                 r = true
             end
         end
     else
-        r = MySQL.single.await('SELECT `plate`, `initial_owner` FROM `'..('%s'):format(dbTableKeys)..'` WHERE `initial_owner` = ? AND `plate` = ?', {identifier, plate})
+        r = MySQL.single.await('SELECT `plate`, `identifier` FROM `'..('%s'):format(dbTableKeys)..'` WHERE `identifier` = ? AND `plate` = ?', {identifier, plate})
         if r then
             if r.identifier == identifier then
                 r = true
@@ -267,7 +293,6 @@ end)
 
 if lockpickEnabled then
     ESX.RegisterUsableItem('lockpick', function(source)
-        print('test')
         TriggerClientEvent('op-vehlock:lockpickVehicle', source)
     end)
 end
