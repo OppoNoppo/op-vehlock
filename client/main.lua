@@ -516,6 +516,45 @@ end
 
 if usingTarget then
 	if targetFramework == 'ox' then
+		local toptions = {
+			[2] = {
+				name = 'op-vehlock:giveKeysTarget',
+				icon = 'fa-solid fa-user-lock',
+				label = langSettings[language]['GiveKeys'],
+				distance = 1.5,
+				onSelect = function(data)
+					TriggerEvent('op-vehlock:giveKeys_TARGETONLY',data.entity)
+				end
+			},
+			[3] = {
+				name = 'op-vehlock:removeKeysTarget',
+				icon = 'fa-solid fa-user-lock',
+				label = langSettings[language]['RemoveKeys'],
+				distance = 1.5,
+				onSelect = function(data)
+					TriggerEvent('op-vehlock:removeKeys',data.entity)
+				end
+			},
+			[4] = {
+				name = 'op-vehlock:lockPick',
+                icon = 'fa-solid fa-handcuffs',
+                label = langSettings[language]['UseLockpick'],
+                distance = 1.5,
+                event = 'op-vehlock:lockpickVehicle',
+                items = 'lockpick'
+			},
+		}
+		if lockpickEnabled then
+			table.insert(toptions, 1, {
+                name = 'op-vehlock:lockVehicle',
+                icon = 'fa-solid fa-key',
+                label = langSettings[language]['UseKeys'],
+                distance = 1.5,
+                onSelect = function(data)
+                    targetLockSys(data.entity)
+                end,
+            })
+		end
 		local function targetLockSys(veh) -- ox_target function only
 			local result = false
             local plate = ESX.Math.Trim(GetVehicleNumberPlateText(veh))
@@ -530,73 +569,44 @@ if usingTarget then
 			end
 		end
 		exports.ox_target:addGlobalVehicle({
-            {
-                name = 'op-vehlock:lockVehicle',
-                icon = 'fa-solid fa-key',
-                label = langSettings[language]['UseKeys'],
-                distance = 1.5,
-                onSelect = function(data)
-                    targetLockSys(data.entity)
-                end,
-            },
-			{
-				name = 'op-vehlock:giveKeysTarget',
-				icon = 'fa-solid fa-user-lock',
-				label = langSettings[language]['GiveKeys'],
-				distance = 1.5,
-				onSelect = function(data)
-					TriggerEvent('op-vehlock:giveKeys_TARGETONLY',data.entity)
-				end
-			},
-			{
-				name = 'op-vehlock:removeKeysTarget',
-				icon = 'fa-solid fa-user-lock',
-				label = langSettings[language]['RemoveKeys'],
-				distance = 1.5,
-				onSelect = function(data)
-					TriggerEvent('op-vehlock:removeKeys',data.entity)
-				end
-			},
-			{
-				name = 'op-vehlock:lockPick',
-                icon = 'fa-solid fa-handcuffs',
-                label = langSettings[language]['UseLockpick'],
-                distance = 1.5,
-                event = 'op-vehlock:lockpickVehicle',
-                items = 'lockpick'
-			},
+            table.unpack(toptions)
         })
 	elseif targetFramework == 'qtarget' then
+		local toptions = {
+			[2] = {
+				icon = 'fa-solid fa-key',
+				label = langSettings[language]['UseKeys'],
+				action = function(entity)
+					local plate = ESX.Math.Trim(GetVehicleNumberPlateText(entity))
+					changeLock(plate,entity)
+				end,
+			},
+			[3] = {
+				icon = 'fa-solid fa-user-lock',
+				label = langSettings[language]['RemoveKeys'],
+				action = function(entity)
+					TriggerEvent('op-vehlock:giveKeys_TARGETONLY',entity)
+				end
+			},
+			[4] = {
+				icon = 'fa-solid fa-user-lock',
+				label = langSettings[language]['RemoveKeys'],
+				action = function(entity)
+					TriggerEvent('op-vehlock:removeKeys',entity)
+				end
+			}
+		}
+		if lockpickEnabled then
+			table.insert(toptions, 1, {
+				event = 'op-vehlock:lockpickVehicle',
+				icon = 'fa-solid fa-handcuffs',
+				label = langSettings[language]['UseLockpick'],
+				item = 'lockpick',
+			})
+		end
 		exports.qtarget:Vehicle({
 			options = {
-				{
-					icon = 'fa-solid fa-key',
-					label = langSettings[language]['UseKeys'],
-					action = function(entity)
-						local plate = ESX.Math.Trim(GetVehicleNumberPlateText(entity))
-                    	changeLock(plate,entity)
-					end,
-				},
-				{
-					icon = 'fa-solid fa-user-lock',
-					label = langSettings[language]['RemoveKeys'],
-					action = function(entity)
-						TriggerEvent('op-vehlock:giveKeys_TARGETONLY',entity)
-					end
-				},
-				{
-					icon = 'fa-solid fa-user-lock',
-					label = langSettings[language]['RemoveKeys'],
-					action = function(entity)
-						TriggerEvent('op-vehlock:removeKeys',entity)
-					end
-				},
-				{
-					event = 'op-vehlock:lockpickVehicle',
-					icon = 'fa-solid fa-handcuffs',
-					label = langSettings[language]['UseLockpick'],
-					item = 'lockpick',
-				},
+				table.unpack(toptions)				
 			},
 			distance = 1.5
 		})
