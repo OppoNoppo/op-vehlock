@@ -1,5 +1,3 @@
-if GetResourceState('ox_target') ~= 'started' or GetResourceState('qtarget') ~= 'started' then usingTarget = false end
-
 ESX = exports["es_extended"]:getSharedObject()
 
 local isOnTimer 		= 0
