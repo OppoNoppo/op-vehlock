@@ -553,10 +553,10 @@ if usingTarget then
                 end,
             })
 		end
-		local function targetLockSys(veh) -- ox_target function only
+		function targetLockSys(veh) -- ox_target function only
 			local result = false
-            local plate = ESX.Math.Trim(GetVehicleNumberPlateText(veh))
-            result = lib.callback.await('op-vehlock:isOwner', false, plate)
+            		local plate = ESX.Math.Trim(GetVehicleNumberPlateText(veh))
+           		result = lib.callback.await('op-vehlock:isOwner', false, plate)
 			if not result and enableKeys then
 				result = lib.callback.await('op-vehlock:hasKey', false, plate)
 			end
