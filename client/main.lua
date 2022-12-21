@@ -21,7 +21,7 @@ RegisterNetEvent('op-vehlock:UpdateClientLocks', function(table)
 	local vehstable = lib.getNearbyVehicles(GetEntityCoords(PlayerPedId()), 999, true)
 	for i=1, #vehstable do
 		for _=1, #table do
-			if table[_].plate == ESX.Math.Trim(GetVehicleNumberPlateText(vehstable[i].vehicle)) then
+			if table[_].plate == Trim(GetVehicleNumberPlateText(vehstable[i].vehicle)) then
 				local veh = vehstable[i].vehicle
 				if table[_].state == 'true' then
 					local doors = GetNumberOfVehicleDoors(veh)
@@ -102,15 +102,15 @@ function changeLockRadius()
 		for i=1, #vehs do
 			lib.callback('op-vehlock:isOwner', false, function(isOwner)
 				if isOwner then
-					changeLock(ESX.Math.Trim(GetVehicleNumberPlateText(vehs[i].vehicle)), vehs[i].vehicle)
+					changeLock(Trim(GetVehicleNumberPlateText(vehs[i].vehicle)), vehs[i].vehicle)
 				else
 					lib.callback('op-vehlock:hasKey', false, function(hasKey)
 						if hasKey then
-							changeLock(ESX.Math.Trim(GetVehicleNumberPlateText(vehs[i].vehicle)), vehs[i].vehicle)
+							changeLock(Trim(GetVehicleNumberPlateText(vehs[i].vehicle)), vehs[i].vehicle)
 						end
-					end, ESX.Math.Trim(GetVehicleNumberPlateText(vehs[i].vehicle)))
+					end, Trim(GetVehicleNumberPlateText(vehs[i].vehicle)))
 				end
-			end, ESX.Math.Trim(GetVehicleNumberPlateText(vehs[i].vehicle)))
+			end, Trim(GetVehicleNumberPlateText(vehs[i].vehicle)))
 		end
 	end
 end
@@ -158,7 +158,7 @@ function giveKeys(target, ignoreFlags) -- ignoreFlags is default false, if you w
 				else
 					lib.notify({type = 'error', title = langSettings[language]['CannotGiveYourself']})
 				end
-			end, ESX.Math.Trim(GetVehicleNumberPlateText(lib.getClosestVehicle(GetEntityCoords(PlayerPedId()), 1.5, true))))
+			end, Trim(GetVehicleNumberPlateText(lib.getClosestVehicle(GetEntityCoords(PlayerPedId()), 1.5, true))))
 			return
 		end
 	end
@@ -177,15 +177,15 @@ function giveKeys(target, ignoreFlags) -- ignoreFlags is default false, if you w
 						lib.callback('op-vehlock:giveKeys', false, function(success)
 							if success then
 								if fullFunctionality then
-									lib.notify({type = 'success', title = (langSettings[language]['KeysGivenTo']):format(ESX.Math.Trim(GetVehicleNumberPlateText(veh)), target)})
+									lib.notify({type = 'success', title = (langSettings[language]['KeysGivenTo']):format(Trim(GetVehicleNumberPlateText(veh)), target)})
 								end
 							else
-								lib.notify({type = 'inform', title = (langSettings[language]['TargetAlreadyHasKeys']):format(ESX.Math.Trim(GetVehicleNumberPlateText(veh)))})
+								lib.notify({type = 'inform', title = (langSettings[language]['TargetAlreadyHasKeys']):format(Trim(GetVehicleNumberPlateText(veh)))})
 							end
-						end, ESX.Math.Trim(GetVehicleNumberPlateText(veh)), target)
+						end, Trim(GetVehicleNumberPlateText(veh)), target)
 					else
 					end
-				end, ESX.Math.Trim(GetVehicleNumberPlateText(veh)), target)
+				end, Trim(GetVehicleNumberPlateText(veh)), target)
 			else
 				lib.notify({type = 'inform', title = langSettings[language]['TargetToFar']})
 			end
@@ -258,12 +258,12 @@ RegisterNetEvent('op-vehlock:giveKeys_TARGETONLY', function(targetParameter)
 				lib.callback('op-vehlock:giveKeys', false, function(success)
 					if success then
 						if fullFunctionality then
-							lib.notify({type = 'success', title = (langSettings[language]['KeysGivenTo']):format(ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)), targetSys2)})
+							lib.notify({type = 'success', title = (langSettings[language]['KeysGivenTo']):format(Trim(GetVehicleNumberPlateText(targetParameter)), targetSys2)})
 						end
 					else
-						lib.notify({type = 'inform', title = (langSettings[language]['TargetAlreadyHasKeys']):format(ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)))})
+						lib.notify({type = 'inform', title = (langSettings[language]['TargetAlreadyHasKeys']):format(Trim(GetVehicleNumberPlateText(targetParameter)))})
 					end
-				end, ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)), targetSys2)
+				end, Trim(GetVehicleNumberPlateText(targetParameter)), targetSys2)
 				Wait(3000)
 				targetSys1 = nil
 				targetSys2 = nil
@@ -280,7 +280,7 @@ RegisterNetEvent('op-vehlock:giveKeys_TARGETONLY', function(targetParameter)
 		else
 			lib.notify({type='error', title=langSettings[language]['ENoAccess']})
 		end
-	end, ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)))
+	end, Trim(GetVehicleNumberPlateText(targetParameter)))
 end)
 
 RegisterNetEvent('op-vehlock:giveKeys',function(target)
@@ -295,7 +295,7 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 			veh = GetVehiclePedIsIn(PlayerPedId(),false)
 			lib.callback('op-vehlock:isOwner', false, function(isOwner)
 				if isOwner then
-					local keys = lib.callback.await('op-vehlock:getKeysOnPlate', false, ESX.Math.Trim(GetVehicleNumberPlateText(veh)))
+					local keys = lib.callback.await('op-vehlock:getKeysOnPlate', false, Trim(GetVehicleNumberPlateText(veh)))
 					local keysOnPlate = {}
 					if #keys > 0 then
 						for i=1, #keys do
@@ -303,7 +303,7 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 							{
 								title=lib.callback.await('op-vehlock:getPlayerNameFromIdentifier', false, keys[i].identifier),
 								description=langSettings[language]['ClickToRemove'],
-								args={plate=ESX.Math.Trim(GetVehicleNumberPlateText(veh)), identifier=keys[i].identifier},
+								args={plate=Trim(GetVehicleNumberPlateText(veh)), identifier=keys[i].identifier},
 								serverEvent='op-vehlock:removeKeyFromPlate',
 							})
 						end
@@ -311,19 +311,19 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 					if #keysOnPlate > 0 then
 						lib.registerContext({
 							id = 'op-vehlock-removeKeys',
-							title = ESX.Math.Trim(GetVehicleNumberPlateText(veh)),
+							title = Trim(GetVehicleNumberPlateText(veh)),
 							options = {
 								table.unpack(keysOnPlate)
 							}
 						})
 						lib.showContext('op-vehlock-removeKeys')
 					else -- No keys on plate
-						lib.notify({type='inform', title=(langSettings[language]['NoKeys']):format(ESX.Math.Trim(GetVehicleNumberPlateText(veh)))})
+						lib.notify({type='inform', title=(langSettings[language]['NoKeys']):format(Trim(GetVehicleNumberPlateText(veh)))})
 					end
 				else
 					lib.notify({type='error', title=langSettings[language]['ENoAccess']})
 				end
-			end, ESX.Math.Trim(GetVehicleNumberPlateText(veh)))
+			end, Trim(GetVehicleNumberPlateText(veh)))
 		else
 			lib.callback('op-vehlock:isOwner', false, function(isOwner)
 				if isOwner then
@@ -386,11 +386,11 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 					if targetSys2 then
 						lib.callback('op-vehlock:hasKey', false, function(hasKey)
 							if hasKey then
-								TriggerServerEvent('op-vehlock:removeKeysID', ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)), targetSys2)
+								TriggerServerEvent('op-vehlock:removeKeysID', Trim(GetVehicleNumberPlateText(targetParameter)), targetSys2)
 							else
-								lib.notify({type='error',title=(langSettings[language]['TargetAlreadyHasNOKeys']):format(ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)))})
+								lib.notify({type='error',title=(langSettings[language]['TargetAlreadyHasNOKeys']):format(Trim(GetVehicleNumberPlateText(targetParameter)))})
 							end
-						end, ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)), targetSys2, true)
+						end, Trim(GetVehicleNumberPlateText(targetParameter)), targetSys2, true)
 						Wait(3000)
 						targetSys1 = nil
 						targetSys2 = nil
@@ -406,13 +406,13 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 				else
 					lib.notify({type='error', title=langSettings[language]['ENoAccess']})
 				end
-			end, ESX.Math.Trim(GetVehicleNumberPlateText(targetParameter)))
+			end, Trim(GetVehicleNumberPlateText(targetParameter)))
 		end
 	elseif IsPedInAnyVehicle(PlayerPedId(), false) then
 		veh = GetVehiclePedIsIn(PlayerPedId(),false)
 		lib.callback('op-vehlock:isOwner', false, function(isOwner)
 			if isOwner then
-				local keys = lib.callback.await('op-vehlock:getKeysOnPlate', false, ESX.Math.Trim(GetVehicleNumberPlateText(veh)))
+				local keys = lib.callback.await('op-vehlock:getKeysOnPlate', false, Trim(GetVehicleNumberPlateText(veh)))
 				local keysOnPlate = {}
 				if #keys > 0 then
 					for i=1, #keys do
@@ -420,7 +420,7 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 						{
 							title=lib.callback.await('op-vehlock:getPlayerNameFromIdentifier', false, keys[i].identifier),
 							description=langSettings[language]['ClickToRemove'],
-							args={plate=ESX.Math.Trim(GetVehicleNumberPlateText(veh)), identifier=keys[i].identifier},
+							args={plate=Trim(GetVehicleNumberPlateText(veh)), identifier=keys[i].identifier},
 							serverEvent='op-vehlock:removeKeyFromPlate',
 						})
 					end
@@ -428,19 +428,19 @@ RegisterNetEvent('op-vehlock:removeKeys', function(targetParameter) -- targetPar
 				if #keysOnPlate > 0 then
 					lib.registerContext({
 						id = 'op-vehlock-removeKeys',
-						title = ESX.Math.Trim(GetVehicleNumberPlateText(veh)),
+						title = Trim(GetVehicleNumberPlateText(veh)),
 						options = {
 							table.unpack(keysOnPlate)
 						}
 					})
 					lib.showContext('op-vehlock-removeKeys')
 				else -- No keys on plate
-					lib.notify({type='inform', title=(langSettings[language]['NoKeys']):format(ESX.Math.Trim(GetVehicleNumberPlateText(veh)))})
+					lib.notify({type='inform', title=(langSettings[language]['NoKeys']):format(Trim(GetVehicleNumberPlateText(veh)))})
 				end
 			else
 				lib.notify({type='error', title=langSettings[language]['ENoAccess']})
 			end
-		end, ESX.Math.Trim(GetVehicleNumberPlateText(veh)))
+		end, Trim(GetVehicleNumberPlateText(veh)))
 	else
 		lib.notify({type='error', title=langSettings[language]['VehicleRequired']})
 	end
@@ -472,7 +472,7 @@ RegisterNetEvent('op-vehlock:lockpickVehicle', function()
 end)
 
 function doLockpicking(veh)
-	local plate = ESX.Math.Trim(GetVehicleNumberPlateText(veh))
+	local plate = Trim(GetVehicleNumberPlateText(veh))
 	TaskPlayAnim(GetPlayerPed(-1), 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@' , 'machinic_loop_mechandplayer' ,8.0, -8.0, -1, 1, 0, false, false, false )
 	local success = lib.skillCheck(lockpickLevels)
 	if success then
@@ -535,7 +535,7 @@ if usingTarget then
 		end
 		function targetLockSys(veh) -- ox_target function only
 			local result = false
-            		local plate = ESX.Math.Trim(GetVehicleNumberPlateText(veh))
+            		local plate = Trim(GetVehicleNumberPlateText(veh))
            		result = lib.callback.await('op-vehlock:isOwner', false, plate)
 			if not result and enableKeys then
 				result = lib.callback.await('op-vehlock:hasKey', false, plate)
@@ -555,7 +555,7 @@ if usingTarget then
 				icon = 'fa-solid fa-key',
 				label = langSettings[language]['UseKeys'],
 				action = function(entity)
-					local plate = ESX.Math.Trim(GetVehicleNumberPlateText(entity))
+					local plate = Trim(GetVehicleNumberPlateText(entity))
 					changeLock(plate,entity)
 				end,
 			},
@@ -594,4 +594,9 @@ if usingTarget then
 		print('targetFramework has an invalid option please check the config.lua')
 		print('targetFramework has an invalid option please check the config.lua')
 	end
+end
+
+function Trim(value)
+	if not value then return nil end
+	return (string.gsub(value, "^%s*(.-)%s*$", "%1"))
 end
