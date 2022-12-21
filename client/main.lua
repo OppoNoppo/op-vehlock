@@ -584,7 +584,7 @@ if usingTarget then
 		end
 		exports.qtarget:Vehicle({
 			options = {
-				table.unpack(toptions)				
+				table.unpack(toptions)
 			},
 			distance = 1.5
 		})
