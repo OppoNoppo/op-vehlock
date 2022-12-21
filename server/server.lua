@@ -65,7 +65,7 @@ lib.callback.register('op-vehlock:giveKeys', function(source, plate, target)
             if targetKey then
                 r = false
             else
-                exports['ox_inventory']:AddItem(target, 'car_keys', 1, {key_combo = q[1]['key_combo']}, nil, function(success, response)
+                exports['ox_inventory']:AddItem(target, 'car_keys', 1, {type = plate, key_combo = q[1]['key_combo']}, nil, function(success, response)
                     if success then
                         r = true
                     else
@@ -78,7 +78,7 @@ lib.callback.register('op-vehlock:giveKeys', function(source, plate, target)
             local keycombo = 'KEY-'..math.random(000000, 999999)
             local keygen = MySQL.insert.await('INSERT INTO `'..('%s'):format(dbTableKeys)..'` (`plate`, `key_combo`) VALUES (?,?)', {plate, keycombo})
             if keygen ~= false then
-                exports['ox_inventory']:AddItem(target, 'car_keys', 1, {key_combo = keycombo}, nil, function(success, response)
+                exports['ox_inventory']:AddItem(target, 'car_keys', 1, {type = plate, key_combo = keycombo}, nil, function(success, response)
                     if success then
                         r = true
                     else
