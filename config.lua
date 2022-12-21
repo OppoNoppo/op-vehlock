@@ -4,6 +4,7 @@
 
 fullFunctionality = true -- Enable keymapping, eg. being able to use the script as a interactive script and not just handling the locking.
 consolePrinting = true -- Print in the serverconsole script outputs like database cleanup etc.
+framework = 'esx' -- 'esx', 'qb'
 
 updateTimer = 3 -- In Seconds
 cleanupTimer = 60 -- In Seconds ( Wipes any plates from the database that no longer exist in the game )
