@@ -90,9 +90,9 @@ lib.callback.register('op-vehlock:giveKeys', function(source, plate, target)
             end
         end
     else
-        r2 = MySQL.single.await('SELECT * FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, ESX.GetPlayerFromId(target).identifier})
+        r2 = MySQL.single.await('SELECT * FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, GetPlayerIden(target)})
         if r2 == nil then
-            r = MySQL.insert.await('INSERT INTO `'..('%s'):format(dbTableKeys)..'` (plate, identifier) VALUES (?,?)', {plate, ESX.GetPlayerFromId(target).identifier})
+            r = MySQL.insert.await('INSERT INTO `'..('%s'):format(dbTableKeys)..'` (plate, identifier) VALUES (?,?)', {plate, GetPlayerIden(target)})
             if r ~= false then
                 r = true
             end
@@ -112,7 +112,7 @@ RegisterNetEvent('op-vehlock:removeKeys', function(source, data)
 end)
 
 RegisterNetEvent('op-vehlock:removeKeysID', function(plate, playerId)
-    MySQL.query('DELETE FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, ESX.GetPlayerFromId(playerId).identifier})
+    MySQL.query('DELETE FROM `'..('%s'):format(dbTableKeys)..'` WHERE plate = ? AND identifier = ?', {plate, GetPlayerIden(playerId)})
 end)
 
 RegisterNetEvent('op-vehlock:wipeKeys', function(plate)
@@ -129,10 +129,10 @@ end)
 
 lib.callback.register('op-vehlock:hasKey', function(source, plate, identifier, isPlayerID)
     if isPlayerID then
-        identifier = ESX.GetPlayerFromId(identifier).identifier
+        identifier = GetPlayerIden(identifier)
     end
     if not identifier then
-        identifier = ESX.GetPlayerFromId(source).identifier
+        identifier = GetPlayerIden(source)
     end
     local r = false
     if useKeyAsItem then
@@ -180,11 +180,11 @@ lib.callback.register('op-vehlock:getPlayerNameFromIdentifier', function(source,
 end)
 
 lib.callback.register('op-vehlock:isOwner', function(source, plate)
-    local xPlayer = ESX.GetPlayerFromId(source)
+    local xPlayer = GetPlayerIden(source)
     local r = false
     r = MySQL.single.await('SELECT owner FROM `owned_vehicles` WHERE plate = ?', {plate})
     if r then
-        if r.owner == xPlayer.identifier then
+        if r.owner == xPlayer then
             r = true
         else
             r = false
@@ -227,10 +227,10 @@ local function checkLocks()
     local vehicles = GetAllVehicles()
     local vehiclePlates = {}
     for i=1, #vehicles do
-        table.insert(vehiclePlates, ESX.Math.Trim(GetVehicleNumberPlateText(vehicles[i])))
+        table.insert(vehiclePlates, Trim(GetVehicleNumberPlateText(vehicles[i])))
     end
     for i=1, #tempLockedVehs do
-        local plate = ESX.Math.Trim(tempLockedVehs[i].plate)
+        local plate = Trim(tempLockedVehs[i].plate)
         for o=1, #vehiclePlates do
             if vehiclePlates[o] == plate then
                 table.remove(tempLockedVehs, i)
@@ -309,7 +309,12 @@ if lockpickEnabled then
 end
 
 lib.callback.register('op-vehlock:lockpickRemove', function(source)
-    local xPlayer = ESX.GetPlayerFromId(source)
+    local xPlayer = GetPlayerIden(source)
     xPlayer.removeInventoryItem('lockpick', 1)
     return true
 end)
+
+function Trim(value)
+	if not value then return nil end
+	return (string.gsub(value, "^%s*(.-)%s*$", "%1"))
+end
