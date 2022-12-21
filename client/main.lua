@@ -1,5 +1,3 @@
-ESX = exports["es_extended"]:getSharedObject()
-
 local isOnTimer 		= 0
 
 -- TargetSys get used for the target system for functions like removeKey and giveKey, you will first have to select your vehicle(targetSys1) and then the player you want to give/remove the key from(targetSys2)
@@ -16,24 +14,6 @@ local targetSys2		= nil -- Second target
 CreateThread(function()
 	lib.requestAnimDict('anim@mp_player_intmenu@key_fob@', 100)
 	lib.requestAnimDict('anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 100)
-end)
-
-
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
-	ESX.PlayerData = xPlayer
-	ESX.PlayerLoaded = true
-end)
-
-RegisterNetEvent('esx:onPlayerLogout')
-AddEventHandler('esx:onPlayerLogout', function()
-	ESX.PlayerLoaded = false
-	ESX.PlayerData = {}
-end)
-
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
-	ESX.PlayerData.job = job
 end)
 
 -- Loop function
