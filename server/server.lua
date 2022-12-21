@@ -223,21 +223,24 @@ end
 
 local function checkLocks()
     if consolePrinting then print(('[^6op-vehlock^0] Cleaning up database table `^6%s^0`'):format(dbTableLocks)) end
-    local unknownPlates = {}
+    local tempLockedVehs = getLocks()
     local vehicles = GetAllVehicles()
     local vehiclePlates = {}
     for i=1, #vehicles do
         table.insert(vehiclePlates, ESX.Math.Trim(GetVehicleNumberPlateText(vehicles[i])))
     end
-    for i=1, #lockedVehicles do
-        if lockedVehicles[i].plate ~= vehiclePlates then
-            table.insert(unknownPlates, lockedVehicles[i].plate)
+    for i=1, #tempLockedVehs do
+        local plate = ESX.Math.Trim(tempLockedVehs[i].plate)
+        for o=1, #vehiclePlates do
+            if vehiclePlates[o] == plate then
+                table.remove(tempLockedVehs, i)
+            end
         end
     end
-    for i=1, #unknownPlates do
-        wipeLock(unknownPlates[i])
+    for i=1, #tempLockedVehs do
+        wipeLock(tempLockedVehs[i].plate)
     end
-    if consolePrinting then print('[^6op-vehlock^0] Database table cleanup has been completed. ^6'..#unknownPlates..'^0 plates have been removed.' ) end
+    if consolePrinting then print('[^6op-vehlock^0] Database table cleanup has been completed. ^6'..#tempLockedVehs..'^0 plates have been removed.' ) end
 end
 
 CreateThread(function()
