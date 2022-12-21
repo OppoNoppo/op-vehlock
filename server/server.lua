@@ -1,4 +1,9 @@
-ESX = exports["es_extended"]:getSharedObject()
+_Framework = nil
+if framework == 'esx' then
+    _Framework = exports["es_extended"]:getSharedObject()
+elseif framework == 'qb' then
+    _Framework = exports['qb-core']:GetCoreObject()
+end
 
 lib.versionCheck('OppoNoppo/op-vehlock')
 
@@ -303,18 +308,44 @@ end)
 ]]
 
 if lockpickEnabled then
-    ESX.RegisterUsableItem('lockpick', function(source)
-        TriggerClientEvent('op-vehlock:lockpickVehicle', source)
-    end)
+    if framework == 'esx' then
+        _Framework.RegisterUsableItem('lockpick', function(source)
+            TriggerClientEvent('op-vehlock:lockpickVehicle', source)
+        end)
+    elseif framework == 'qb' then
+        _Framework.Functions.CreateUseableItem('lockpick', function(source, item)
+            TriggerClientEvent('op-vehlock:lockpickVehicle', source)
+        end)
+    else
+        print('[^6op-vehlock^0] Current framework setting does is not supported for lockpicking. The script will go further with lockpickEnabled set to ^6false^0.' )
+        lockpickEnabled = false
+    end
 end
 
 lib.callback.register('op-vehlock:lockpickRemove', function(source)
-    local xPlayer = GetPlayerIden(source)
-    xPlayer.removeInventoryItem('lockpick', 1)
-    return true
+    if framework == 'esx' then
+        local xPlayer = ESX.GetPlayerFromId(source)
+        xPlayer.removeInventoryItem('lockpick', 1)
+        return true
+    elseif framework == 'qb' then
+        local Player = QBCore.Functions.GetPlayer(source)
+        if not Player.Functions.GetItemByName('my_cool_item') then return false end
+        _Framework.Functions.UseItem(source, 'my_cool_item')
+        return true
+    else
+        return false
+    end
 end)
 
 function Trim(value)
 	if not value then return nil end
 	return (string.gsub(value, "^%s*(.-)%s*$", "%1"))
+end
+
+function GetPlayerIden(target)
+    if framework == 'esx' then
+        return _Framework.GetPlayerFromId(target).identifier
+    elseif framework == 'qb' then
+        _Framework.Functions.GetIdentifier(target)
+    end
 end
