@@ -477,17 +477,7 @@ function doLockpicking(veh)
 	local success = lib.skillCheck(lockpickLevels)
 	if success then
 		ClearPedTasks(PlayerPedId())
-		lib.callback('op-vehlock:getVehState', false, function(isLocked)
-			if isLocked then -- is locked
-				changeLock(plate, veh, true)
-			else
-				lib.callback('op-vehlock:updateLock', false, function(result)
-					if result then
-						lib.notify({type = 'success', title = (langSettings[language]['Success'])})
-					end
-				end, plate, false)
-			end
-		end, plate)
+		changeLock(plate, veh, true)
 	else
 		ClearPedTasks(PlayerPedId())
 		lib.notify({type = 'error', title = langSettings[language]['LockPickFailed']})
