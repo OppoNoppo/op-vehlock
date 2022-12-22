@@ -42,6 +42,7 @@ langSettings = {
     ['en'] = {
         ['keyMappingLabel'] = 'Vehiclelock',
         ['OnCooldown'] = 'You are on cooldown please wait',
+        ['Success'] = 'Success',
 
         -- Keys
         ['CannotGiveYourself'] = 'You cannot give yourself keys.',
@@ -79,6 +80,7 @@ langSettings = {
     ['nl'] = {
         ['keyMappingLabel'] = 'Voertuig slot',
         ['OnCooldown'] = 'Even wachten',
+        ['Success'] = 'Successvol',
 
         -- Keys
         ['CannotGiveYourself'] = 'Je kunt jezelf geen sleutels geven.',
