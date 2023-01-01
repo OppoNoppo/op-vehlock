@@ -244,16 +244,15 @@ local function checkLocks()
 end
 
 CreateThread(function()
-	while true do
+    while true do
         lockedVehicles = getLocks()
-		TriggerClientEvent('op-vehlock:UpdateClientLocks', -1, lockedVehicles)
-		Wait(updateTimer*1000)
-	end
+        TriggerClientEvent('op-vehlock:UpdateClientLocks', -1, lockedVehicles)
+        Wait(updateTimer*1000)
+    end
 end)
 
 CreateThread(function()
     while true do
-        lockedVehicles = getLocks()
         checkLocks()
         Wait(cleanupTimer*1000)
     end
