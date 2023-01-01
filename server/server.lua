@@ -187,7 +187,11 @@ end)
 lib.callback.register('op-vehlock:isOwner', function(source, plate)
     local xPlayer = GetPlayerIden(source)
     local r = false
-    r = MySQL.single.await('SELECT owner FROM `owned_vehicles` WHERE plate = ?', {plate})
+    if framework == 'esx' then
+        r = MySQL.single.await('SELECT owner FROM `owned_vehicles` WHERE plate = ?', {plate})
+    elseif framework == 'qb' then
+        r = MySQL.single.await('SELECT license FROM `player_vehicles` WHERE plate = ?', {plate})
+    end
     if r then
         if r.owner == xPlayer then
             r = true
@@ -346,6 +350,6 @@ function GetPlayerIden(target)
     if framework == 'esx' then
         return _Framework.GetPlayerFromId(target).identifier
     elseif framework == 'qb' then
-        _Framework.Functions.GetIdentifier(target)
+        _Framework.Functions.GetIdentifier(target, 'license')
     end
 end
