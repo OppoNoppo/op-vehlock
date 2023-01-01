@@ -12,7 +12,6 @@ client_scripts {
 }
 
 shared_scripts {
-    '@es_extended/imports.lua',
     '@ox_lib/init.lua',
     'config.lua'
 }
