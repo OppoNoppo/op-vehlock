@@ -204,15 +204,6 @@ lib.callback.register('op-vehlock:isOwner', function(source, plate)
 
     return r
 end)
-
-RegisterNetEvent('op-vehlock:addJobCar', function(plate, job, grade)
-
-end)
-
-RegisterNetEvent('op-vehlock:removeJobCar', function(plate, job, grade)
-
-end)
-
 --[[
 
 #
