@@ -318,11 +318,11 @@ end
 
 lib.callback.register('op-vehlock:lockpickRemove', function(source)
     if framework == 'esx' then
-        local xPlayer = ESX.GetPlayerFromId(source)
+        local xPlayer = _Framework.GetPlayerFromId(source)
         xPlayer.removeInventoryItem('lockpick', 1)
         return true
     elseif framework == 'qb' then
-        local Player = QBCore.Functions.GetPlayer(source)
+        local Player = _Framework.Functions.GetPlayer(source)
         if not Player.Functions.GetItemByName('my_cool_item') then return false end
         _Framework.Functions.UseItem(source, 'my_cool_item')
         return true
