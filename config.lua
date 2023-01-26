@@ -114,5 +114,43 @@ langSettings = {
         ['ETryAgain'] = 'Er is een error, probeer opnieuw.',
         ['ENoAccess'] = 'Geen toegang tot het slot van dit voertuig.',
         ['NoResult'] = 'Geen resultaat gevonden',
+    },
+    ['fr'] = {
+        ['keyMappingLabel'] = 'Vehiclelock',
+        ['OnCooldown'] = 'Vous êtes en cooldown, veuillez patienter',
+        ['Success'] = 'Succès',
+
+        -- Keys
+        ['CannotGiveYourself'] = 'Vous ne pouvez pas vous donner des clés.',
+        ['AlreadyHasKeys'] = 'Vous avez déjà les clés',
+        ['VehicleRequired'] = 'Vous devez être dans un véhicule',
+        ['TargetAlreadyHasKeys'] = 'La cible a déjà les clés pour %s', -- ( %s = plate)
+        ['TargetAlreadyHasNOKeys'] = 'La cible n a pas les clés pour %s', -- ( %s = plate)
+        ['KeysGivenTo'] = 'Les clés de la plaque %s ont été données à %s', -- (1st %s = plate, 2nd %s = target identifier)
+        ['NoKeys'] = 'Il n y a pas de clés enregistrées sur la plaque %s', -- ( %s = plate )
+        ['ClickToRemove'] = 'Cliquez pour supprimer l accès clé',
+
+        -- Target // Keys
+        ['UseKeys'] = 'Utiliser les clés', -- only for when target is enabled
+        ['RemoveKeys'] = 'Supprimer les clés',
+        ['GiveKeys'] = 'Donner les clés',
+        ['SelectPlayer'] = 'Sélectionnez un joueur',
+        ['KeysRemoved'] = 'Clés de la cible supprimées',
+
+        -- Locks
+        ['NowOpen'] = '%s est maintenant ouvert', -- ( %s = plate )
+        ['NowLocked'] = '%s est maintenant verrouillé', -- ( %s = plate )
+
+        -- Lockpick
+        ['LeaveVehicle'] = 'Vous devez laisser votre véhicule pour ce faire.',
+        ['LockPickFailed'] = 'Votre lockpick  s est cassé, la tâche a échoué.',
+        ['UseLockpick'] = 'Utiliser un Lock-pick',
+
+        -- Error
+        ['TargetNotOnline'] = 'La cible n est pas en ligne',
+        ['TargetToFar'] = 'La cible est trop loin',
+        ['ETryAgain'] = 'Une erreur s est produite, veuillez réessayer.',
+        ['ENoAccess'] = 'Vous n avez pas accès à ce véhicule.',
+        ['NoResult'] = 'Aucun résultat trouvé',
     }
 }
