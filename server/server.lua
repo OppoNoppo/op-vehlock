@@ -252,9 +252,11 @@ CreateThread(function()
 end)
 
 CreateThread(function()
-    while true do
-        checkLocks()
-        Wait(cleanupTimer*1000)
+    if wipeKeysInterval then
+        while true do
+            checkLocks()
+            Wait(cleanupTimer*1000)
+        end
     end
 end)
 
