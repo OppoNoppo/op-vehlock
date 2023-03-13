@@ -325,8 +325,8 @@ lib.callback.register('op-vehlock:lockpickRemove', function(source)
         return true
     elseif framework == 'qb' then
         local Player = _Framework.Functions.GetPlayer(source)
-        if not Player.Functions.GetItemByName('my_cool_item') then return false end
-        _Framework.Functions.UseItem(source, 'my_cool_item')
+        if not Player.Functions.GetItemByName('lockpick') then return false end
+        _Framework.Functions.UseItem(source, 'lockpick')
         return true
     else
         return false
