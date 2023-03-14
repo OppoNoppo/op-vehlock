@@ -51,6 +51,21 @@ lib.callback.register('op-vehlock:updateLock', function(source, plate, state)
     return r
 end)
 
+lib.callback.register('op-vehlock:npcLock', function(source, plate)
+    local r = false
+    local r1 = MySQL.single.await('SELECT * FROM `'..('%s'):format(dbTableLocks)..'` WHERE plate = ?',{plate})
+    local r2
+    if not r1 then
+        r2 = MySQL.insert.await('INSERT INTO `'..('%s'):format(dbTableLocks)..'` (plate, state) VALUES (?,?)', {plate, true})
+        if r2 then
+            r = true
+        end
+    else
+        r = false
+    end
+    return r
+end)
+
 --[[
 
 #

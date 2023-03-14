@@ -596,7 +596,24 @@ if usingTarget then
 	end
 end
 
+
+--[[
+
+#
+#	Handlers / Functions
+#
+
+]]
+
 function Trim(value)
 	if not value then return nil end
 	return (string.gsub(value, "^%s*(.-)%s*$", "%1"))
 end
+
+AddEventHandler('entityCreated', function(entity)
+    if not DoesEntityExist(entity) then return end
+	if GetEntityType(entity) ~= 2 then return end
+	lib.callback('op-vehlock:lockNpc', false, function(success)
+		if not succes then return end
+	end, GetVehicleNumberPlateText(entity))
+end)
